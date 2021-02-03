@@ -7,6 +7,9 @@ class NegociacaoController {
         this._inputQuantidade = $("#quantidade");
         this._inputValor = $("#valor");
         this._listaNegociacoes = new ListaNegociacoes();
+        this._negociacoesView = new NegociacoesView($("#negociacoesView"));
+
+        this._negociacoesView.update(this._listaNegociacoes);
     }
 
     adiciona (event) {
@@ -21,6 +24,7 @@ class NegociacaoController {
 
         let negociacao = this._criaNegociacao();
         this._listaNegociacoes.adiciona(negociacao);
+        this._negociacoesView.update(this._listaNegociacoes);
         this._limpaFormulario();
     }
 
@@ -28,7 +32,8 @@ class NegociacaoController {
         let negociacao = new Negociacao(
             DateHelper.textoParaData(this._inputData.value),
             this._inputQuantidade.value,
-            this._inputValor.value
+            this._inputValor.value,
+            this._calculaVolume(this._inputQuantidade, this._inputValor)
         );
 
         return negociacao;
@@ -40,5 +45,9 @@ class NegociacaoController {
         this._inputValor.value = 0;
 
         this._inputData.focus();
+    }
+
+    _calculaVolume(quantidade, valor) {
+        return quantidade * valor;
     }
 }
